@@ -1,9 +1,10 @@
 package com.techleads.app.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,16 @@ class ItemControllerTestV1 {
 				.accept(MediaType.APPLICATION_JSON);
 		MvcResult result = mockMvc.perform(request).andExpect(status().isOk())
 				.andExpect(content().json("{\"id\":10,\"name\":\"laptop\",\"qty\":1,\"price\":20000.0}")).andReturn();
+	}
+	
+	@Test
+	public void findAllItemsTest() throws Exception {
+		
+		when(service.findAll()).thenReturn(Arrays.asList(new Item(10, "laptop", 1, 20000D),new Item(11, "desktop", 1, 30000D)));
+		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get("/allitems")
+				.accept(MediaType.APPLICATION_JSON);
+		MvcResult result = mockMvc.perform(request).andExpect(status().isOk())
+				.andExpect(content().json("[{id:10,name:laptop,qty:1,price:20000.0},{id:11,name:desktop,qty:1,price:30000.0}]")).andReturn();
 	}
 
 }
